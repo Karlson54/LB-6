@@ -7,7 +7,7 @@ namespace CryptoSecurity.Encryption
     {
         private readonly int _firstPrime = 13;
         private readonly int _secondPrime = 61;
-        private readonly int _publicExponent = 11;
+        private int _publicExponent = 11;
 
         private int _modulus;
         private int _privateKey;
@@ -21,8 +21,11 @@ namespace CryptoSecurity.Encryption
         {
             _modulus = _firstPrime * _secondPrime;
             int totient = (_firstPrime - 1) * (_secondPrime - 1);
+
+            _publicExponent = EncryptionUtils.CalculatePublicExponent(totient);
             _privateKey = EncryptionUtils.ComputeModularInverse(_publicExponent, totient);
         }
+
 
         public List<int> ConvertTextToASCII(string message)
         {
@@ -47,7 +50,6 @@ namespace CryptoSecurity.Encryption
                 plain.Append((char)EncryptionUtils.FastPowerModulo(cipher, _privateKey, _modulus));
             return plain.ToString();
         }
-
         public Keys GetKeys() => new Keys(_publicExponent, _modulus, _privateKey);
     }
 }

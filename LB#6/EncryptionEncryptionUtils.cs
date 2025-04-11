@@ -38,5 +38,27 @@
             }
             return x < 0 ? x + originalModulus : x;
         }
+
+        public static int CalculatePublicExponent(int totient)
+        {
+            for (int e = 2; e < totient; e++)
+            {
+                if (GCD(e, totient) == 1)
+                    return e;
+            }
+            throw new Exception("Could not find a suitable e.");
+        }
+
+        private static int GCD(int a, int b)
+        {
+            while (b != 0)
+            {
+                int temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return a;
+        }
+
     }
 }
